@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        .page {
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 24px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 28px;
+        }
+
+        form {
+            margin: 0;
+        }
+
+        .create-form {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .create-form {
+            margin-bottom: 16px;
+        }
+
+        .user-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .user-row {
+            padding: 12px;
+            border: 1px solid #ddd;
+            background: #fafafa;
+        }
+
+        .edit-form {
+            display: grid;
+            grid-template-columns: 80px 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #bbb;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: 0;
+            background: #222;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delete {
+            background: #b42318;
+        }
+
+        .empty {
+            padding: 16px;
+            border: 1px dashed #bbb;
+            background: #fafafa;
+        }
+
+        @media (max-width: 640px) {
+            .create-form,
+            .edit-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <h1>Books</h1>
+    <form class="create-form" method="post" action="/book_create/">
+        <input type="text" name="name" placeholder="Book name" required>
+        <input type="text" name="author" placeholder="Author name" required>
+        <input type="text" name="price" placeholder="Price" required>
+        <button type="submit">Create</button>
+    </form>
+
+    {% if books %}
+        <div class="user-list">
+            {% for book in books %}
+                <div class="user-row">
+                    <strong>{{ book.name }}</strong> by {{ book.author }}
+                    <form method="post" action="/book_delete/" style="display: inline;">
+                        <input type="int" name="book_id" value="{{ book.id }}">
+                        <button type="submit" class="delete">Delete</button>
+                    </form>
+                    <form method="post" action="/book_update/" style="display: inline;">
+                        <input type="int" name="book_id" value="{{ book.id }}">
+                        <input type="text" name="name" value="{{ book.name }}" required>
+                        <input type="text" name="author" value="{{ book.author }}" required>
+                        <input type="text" name="price" value="{{ book.price }}" required>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty">No books found.</div>
+    {% endif %}
+</body>
